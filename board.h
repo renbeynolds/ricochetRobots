@@ -29,9 +29,11 @@ class Board {
         bool goalSolved(char which) const;
         bool done() const;
         uint32_t asNumber() const;
+        map<char, Robot*> getRobots() { return _robots; }
 
 		// MODIFIERS
 		Position moveRobot(char which, char dir);
+        void setToConfig(uint32_t config);
 
 	private:
 		// MEMBER VARIABLES

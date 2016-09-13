@@ -195,6 +195,26 @@ Position Board::moveRobot(char which, char dir) {
 	return p;
 }
 
+void Board::setToConfig(uint32_t config) {
+    map<char, Robot*>::const_iterator it;
+    int shift = 24;
+    for(it = _robots.begin(); it != _robots.end(); it++) {
+        Position p = it->second->getPosition();
+        _spaces[p.x][p.y] &= 0xF0FF; 
+        uint8_t new_bot_position = config >> shift;
+        int x = new_bot_position & 0x0F;
+        int y = (new_bot_position & 0xF0) >> 4;
+        it->second->setPosition(x, y);
+        switch(it->first) {
+            case 'R': { _spaces[x][y] |= 0x0800; break; }
+            case 'G': { _spaces[x][y] |= 0x0400; break; }
+            case 'B': { _spaces[x][y] |= 0x0200; break; }
+            case 'Y': { _spaces[x][y] |= 0x0100; break; }
+        }
+        shift -= 8;
+    }
+}
+
 void Board::addWall(int x, int y, char dir) {
 	if(x < _width && y < _height && x >= 0 && y >= 0) {
 		switch(dir) {
