@@ -176,6 +176,7 @@ bool Board::done() const {
 Position Board::moveRobot(char which, char dir) {
 	Robot* r = _robots[which];
 	Position p = r->getPosition();
+    Position old_p = p;
 	_spaces[p.x][p.y] &= 0xF0FF;
 	while(!hasWall(p.x, p.y, dir) && !hasRobot(p.x, p.y, dir)) {
 		switch(dir) {
@@ -192,7 +193,7 @@ Position Board::moveRobot(char which, char dir) {
 		case 'B': { _spaces[p.x][p.y] |= 0x0200; break; }
 		case 'Y': { _spaces[p.x][p.y] |= 0x0100; break; }
 	}
-	return p;
+	return old_p;
 }
 
 void Board::setToConfig(uint32_t config) {
@@ -202,8 +203,8 @@ void Board::setToConfig(uint32_t config) {
         Position p = it->second->getPosition();
         _spaces[p.x][p.y] &= 0xF0FF; 
         uint8_t new_bot_position = config >> shift;
-        int x = new_bot_position & 0x0F;
-        int y = (new_bot_position & 0xF0) >> 4;
+        int x = (new_bot_position & 0xF0) >> 4;
+        int y = new_bot_position & 0x0F;
         it->second->setPosition(x, y);
         switch(it->first) {
             case 'R': { _spaces[x][y] |= 0x0800; break; }
@@ -212,6 +213,19 @@ void Board::setToConfig(uint32_t config) {
             case 'Y': { _spaces[x][y] |= 0x0100; break; }
         }
         shift -= 8;
+    }
+}
+
+void Board::moveRobotToPosition(char which, Position new_p) {
+    Robot* r = _robots[which];
+    Position old_p = r->getPosition(); 
+    _spaces[old_p.x][old_p.y] &= 0xF0FF;
+    r->setPosition(new_p);
+    switch(which) {
+        case 'R': { _spaces[new_p.x][new_p.y] |= 0x0800; break; }
+        case 'G': { _spaces[new_p.x][new_p.y] |= 0x0400; break; }
+        case 'B': { _spaces[new_p.x][new_p.y] |= 0x0200; break; }
+        case 'Y': { _spaces[new_p.x][new_p.y] |= 0x0100; break; }
     }
 }
 
@@ -276,6 +290,8 @@ bool Board::hasRobotWest(int x, int y) const {
     }
 }
 
+// 8 bits each for the four robots RGBY
+// 4 upper bits for x, for lower bits for y
 uint32_t Board::asNumber() const {
     map<char, Robot*>::const_iterator it;
     uint32_t answer = 0;
