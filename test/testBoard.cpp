@@ -60,6 +60,66 @@ TEST(BoardTest, BoardAsNumber) {
 	ASSERT_EQ(board.hasRobot(0, 1, 'N'), false);
 	ASSERT_EQ(board.hasRobot(1, 1, 'N'), true);
 	ASSERT_EQ(board.asNumber(), 0x10000000);
+
+}
+
+//-------------------------------------------------------
+// Test on input1 (2x2, one robot, one goal, one wall)
+//-------------------------------------------------------
+TEST(BoardTest, Input1) {
+
+	// Construct and solve the board
+	Board board("test/input/input1.txt");
+	board.solve();
+
+	// Check for the correct completed state
+	ASSERT_EQ(board.getRobot(0, 0), 0);
+	ASSERT_EQ(board.getRobot(1, 0), 'R');
+	ASSERT_EQ(board.getRobotPosition('R'), Position(1, 0));
+	ASSERT_EQ(board.hasRobot(0, 1, 'N'), false);
+	ASSERT_EQ(board.hasRobot(1, 1, 'N'), true);
+	ASSERT_EQ(board.asNumber(), 0x10000000);
+
+}
+
+//-------------------------------------------------------
+// Test on input2 (4x4, two robots, one goal, no walls)
+//-------------------------------------------------------
+TEST(BoardTest, Input2) {
+
+	// Construct and solve the board
+	Board board("test/input/input2.txt");
+	board.solve();
+
+	// Check for the correct completed state
+	ASSERT_EQ(board.getRobot(0, 0), 0);
+	ASSERT_EQ(board.getRobot(0, 3), 0);
+	ASSERT_EQ(board.getRobot(2, 0), 'R');
+	ASSERT_EQ(board.getRobot(3, 0), 'G');
+	ASSERT_EQ(board.getRobotPosition('R'), Position(2, 0));
+	ASSERT_EQ(board.getRobotPosition('G'), Position(3, 0));
+	ASSERT_EQ(board.asNumber(), 0x30200000);
+
+}
+
+//-------------------------------------------------------
+// Test on input3 (4x4, two robots, two goals, no walls)
+//-------------------------------------------------------
+TEST(BoardTest, Input3) {
+
+	// Construct and solve the board
+	Board board("test/input/input3.txt");
+	board.solve();
+
+	// Check for the correct completed state
+	ASSERT_EQ(board.getRobot(0, 0), 0);
+	ASSERT_EQ(board.getRobot(0, 3), 0);
+	ASSERT_EQ(board.getRobot(2, 0), 'R');
+	ASSERT_EQ(board.getRobot(3, 3), 'G');
+	ASSERT_EQ(board.getRobotPosition('R'), Position(2, 0));
+	ASSERT_EQ(board.getRobotPosition('G'), Position(3, 3));
+	ASSERT_EQ(board.asNumber(), 0x33200000);
+
 }
 
 int main(int argc, char **argv) {

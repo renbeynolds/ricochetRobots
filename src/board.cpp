@@ -302,3 +302,55 @@ uint32_t Board::asNumber() const {
     }
     return answer;
 }
+
+void Board::solve() {
+
+	this->print();
+
+	queue<uint32_t> configs;
+	configs.push(this->asNumber());
+
+	while(!(this->done()) && !configs.empty()) {
+		
+		this->setToConfig(configs.front());
+		configs.pop();
+
+		map<char, Robot*>::iterator it;
+		for(it = _robots.begin(); it != _robots.end(); it++) {
+
+			Position p = this->moveRobot(it->first, 'N');
+			if(this->done()) { break; }
+			configs.push(this->asNumber());
+			this->moveRobotToPosition(it->first, p);
+
+			p = this->moveRobot(it->first, 'S');
+			if(this->done()) { break; }
+			configs.push(this->asNumber());
+			this->moveRobotToPosition(it->first, p);
+
+			p = this->moveRobot(it->first, 'E');
+			if(this->done()) { break; }
+			configs.push(this->asNumber());
+			this->moveRobotToPosition(it->first, p);
+
+			p = this->moveRobot(it->first, 'W');
+			if(this->done()) { break; }
+			configs.push(this->asNumber());
+			this->moveRobotToPosition(it->first, p);
+
+		}
+		
+	}
+
+	this->print();
+
+}
+
+
+
+
+
+
+
+
+

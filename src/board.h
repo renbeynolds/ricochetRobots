@@ -5,6 +5,7 @@
 #include <sstream>
 #include <map>
 #include <stdint.h>
+#include <queue>
 #include "robot.h"
 
 #ifndef BOARD_H
@@ -38,6 +39,7 @@ class Board {
 		Position moveRobot(char which, char dir);
         void setToConfig(uint32_t config);
         void moveRobotToPosition(char which, Position new_p);
+		void solve();
 
 	private:
 		// MEMBER VARIABLES
