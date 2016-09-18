@@ -64,7 +64,7 @@ TEST(BoardTest, BoardAsNumber) {
 }
 
 //-------------------------------------------------------
-// Test on input1 (2x2, one robot, one goal, one wall)
+// Test on input1 (2x2, 1 robot, 1 goal, 1 wall)
 //-------------------------------------------------------
 TEST(BoardTest, Input1) {
 
@@ -83,7 +83,7 @@ TEST(BoardTest, Input1) {
 }
 
 //-------------------------------------------------------
-// Test on input2 (4x4, two robots, one goal, no walls)
+// Test on input2 (4x4, 2 robots, 1 goal, 0 walls)
 //-------------------------------------------------------
 TEST(BoardTest, Input2) {
 
@@ -103,7 +103,7 @@ TEST(BoardTest, Input2) {
 }
 
 //-------------------------------------------------------
-// Test on input3 (4x4, two robots, two goals, no walls)
+// Test on input3 (4x4, 2 robots, 2 goals, 0 walls)
 //-------------------------------------------------------
 TEST(BoardTest, Input3) {
 
@@ -119,6 +119,17 @@ TEST(BoardTest, Input3) {
 	ASSERT_EQ(board.getRobotPosition('R'), Position(2, 0));
 	ASSERT_EQ(board.getRobotPosition('G'), Position(3, 3));
 	ASSERT_EQ(board.asNumber(), 0x33200000);
+
+}
+
+//-------------------------------------------------------
+// Test on input4 (16x16, 4 robots, 1 goal, 48 walls)
+//-------------------------------------------------------
+TEST(BoardTest, Input4) {
+
+	// Construct and solve the board
+	Board board("test/input/input4.txt");
+	board.solve();
 
 }
 
