@@ -1,5 +1,8 @@
 # Ricochet Robots
 
+### Requirements
+1. C++11
+
 ### Input File Format
 ###### (one line per number):
 1. width of board (max 16)

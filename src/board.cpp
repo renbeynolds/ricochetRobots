@@ -306,36 +306,56 @@ uint32_t Board::asNumber() const {
 void Board::solve() {
 
 	this->print();
+	uint32_t config;
+	queue<uint32_t> configsqueue;
 
-	queue<uint32_t> configs;
-	configs.push(this->asNumber());
+	config = this->asNumber();
+	configsqueue.push(config);
+	_prev.insert(config);
 
-	while(!(this->done()) && !configs.empty()) {
+	while(!(this->done()) && !configsqueue.empty()) {
 		
-		this->setToConfig(configs.front());
-		configs.pop();
+		config = configsqueue.front();
+		configsqueue.pop();
+		this->setToConfig(config);
 
 		map<char, Robot*>::iterator it;
 		for(it = _robots.begin(); it != _robots.end(); it++) {
 
 			Position p = this->moveRobot(it->first, 'N');
 			if(this->done()) { break; }
-			configs.push(this->asNumber());
+			config = this->asNumber();
+			if(_prev.find(config) == _prev.end()) {
+				configsqueue.push(config);
+				_prev.insert(config);
+			}
 			this->moveRobotToPosition(it->first, p);
 
 			p = this->moveRobot(it->first, 'S');
 			if(this->done()) { break; }
-			configs.push(this->asNumber());
+			config = this->asNumber();
+			if(_prev.find(config) == _prev.end()) {
+				configsqueue.push(config);
+				_prev.insert(config);
+			}
 			this->moveRobotToPosition(it->first, p);
 
 			p = this->moveRobot(it->first, 'E');
 			if(this->done()) { break; }
-			configs.push(this->asNumber());
+			config = this->asNumber();
+			if(_prev.find(config) == _prev.end()) {
+				configsqueue.push(config);
+				_prev.insert(config);
+			}
 			this->moveRobotToPosition(it->first, p);
 
 			p = this->moveRobot(it->first, 'W');
 			if(this->done()) { break; }
-			configs.push(this->asNumber());
+			config = this->asNumber();
+			if(_prev.find(config) == _prev.end()) {
+				configsqueue.push(config);
+				_prev.insert(config);
+			}
 			this->moveRobotToPosition(it->first, p);
 
 		}

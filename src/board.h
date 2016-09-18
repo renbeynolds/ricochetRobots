@@ -6,6 +6,8 @@
 #include <map>
 #include <stdint.h>
 #include <queue>
+#include <algorithm>
+#include <unordered_set>
 #include "robot.h"
 
 #ifndef BOARD_H
@@ -48,6 +50,7 @@ class Board {
 		vector<vector<unsigned short> > _spaces;
 		map<char, Robot*> _robots;
         map<char, Position*> _goals;
+		unordered_set<uint32_t> _prev;
 
         // ACCESSORS
         bool hasWallNorth(int x, int y) const { return _spaces[x][y] & 0x8000; }
