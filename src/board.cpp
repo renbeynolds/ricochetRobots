@@ -50,8 +50,7 @@ Board::Board(const char* filename) {
             switch(which) {
                 case 'R': { _spaces[x][y] |= 0x0080; break; }
                 case 'G': { _spaces[x][y] |= 0x0040; break; }
-                case 'B': { _spaces[x][y] |= 0x0020; break; }
-                case 'Y': { _spaces[x][y] |= 0x0010; break; }
+                case 'B': { _spaces[x][y] |= 0x0020; break; } case 'Y': { _spaces[x][y] |= 0x0010; break; }
             }
 		}
 
@@ -305,56 +304,64 @@ uint32_t Board::asNumber() const {
 
 void Board::solve() {
 
-	this->print();
-	uint32_t config;
+	uint32_t prev_config;
+	uint32_t new_config;
+	uint32_t initial_config;
 	queue<uint32_t> configsqueue;
 
-	config = this->asNumber();
-	configsqueue.push(config);
-	_prev.insert(config);
+	initial_config = this->asNumber();
+	configsqueue.push(initial_config);
+	_prev.insert(initial_config);
+
+	// CURRENT, PREVIOUS
+	unordered_map<uint32_t, uint32_t> steps;
 
 	while(!(this->done()) && !configsqueue.empty()) {
 		
-		config = configsqueue.front();
+		prev_config = configsqueue.front();
 		configsqueue.pop();
-		this->setToConfig(config);
+		this->setToConfig(prev_config);
 
 		map<char, Robot*>::iterator it;
 		for(it = _robots.begin(); it != _robots.end(); it++) {
 
 			Position p = this->moveRobot(it->first, 'N');
 			if(this->done()) { break; }
-			config = this->asNumber();
-			if(_prev.find(config) == _prev.end()) {
-				configsqueue.push(config);
-				_prev.insert(config);
+			new_config = this->asNumber();
+			if(_prev.find(new_config) == _prev.end()) {
+				steps.emplace(new_config, prev_config);
+				configsqueue.push(new_config);
+				_prev.insert(new_config);
 			}
 			this->moveRobotToPosition(it->first, p);
 
 			p = this->moveRobot(it->first, 'S');
 			if(this->done()) { break; }
-			config = this->asNumber();
-			if(_prev.find(config) == _prev.end()) {
-				configsqueue.push(config);
-				_prev.insert(config);
+			new_config = this->asNumber();
+			if(_prev.find(new_config) == _prev.end()) {
+				steps.emplace(new_config, prev_config);
+				configsqueue.push(new_config);
+				_prev.insert(new_config);
 			}
 			this->moveRobotToPosition(it->first, p);
 
 			p = this->moveRobot(it->first, 'E');
 			if(this->done()) { break; }
-			config = this->asNumber();
-			if(_prev.find(config) == _prev.end()) {
-				configsqueue.push(config);
-				_prev.insert(config);
+			new_config = this->asNumber();
+			if(_prev.find(new_config) == _prev.end()) {
+				steps.emplace(new_config, prev_config);
+				configsqueue.push(new_config);
+				_prev.insert(new_config);
 			}
 			this->moveRobotToPosition(it->first, p);
 
 			p = this->moveRobot(it->first, 'W');
 			if(this->done()) { break; }
-			config = this->asNumber();
-			if(_prev.find(config) == _prev.end()) {
-				configsqueue.push(config);
-				_prev.insert(config);
+			new_config = this->asNumber();
+			if(_prev.find(new_config) == _prev.end()) {
+				steps.emplace(new_config, prev_config);
+				configsqueue.push(new_config);
+				_prev.insert(new_config);
 			}
 			this->moveRobotToPosition(it->first, p);
 
@@ -362,6 +369,14 @@ void Board::solve() {
 		
 	}
 
+	new_config = this->asNumber();
+	this->print();
+	while(prev_config != initial_config) {
+		this->setToConfig(prev_config);
+		this->print();
+		prev_config = steps.find(prev_config)->second;	
+	}
+	this->setToConfig(prev_config);
 	this->print();
 
 }
