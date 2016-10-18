@@ -50,7 +50,8 @@ Board::Board(const char* filename) {
             switch(which) {
                 case 'R': { _spaces[x][y] |= 0x0080; break; }
                 case 'G': { _spaces[x][y] |= 0x0040; break; }
-                case 'B': { _spaces[x][y] |= 0x0020; break; } case 'Y': { _spaces[x][y] |= 0x0010; break; }
+                case 'B': { _spaces[x][y] |= 0x0020; break; }
+				case 'Y': { _spaces[x][y] |= 0x0010; break; }
             }
 		}
 

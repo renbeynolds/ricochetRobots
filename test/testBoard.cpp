@@ -107,6 +107,17 @@ TEST(BoardTest, Input4) {
 
 }
 
+//-------------------------------------------------------
+// Test on input5 (16x16, 4 robots, 1 goal, 48 walls)
+//-------------------------------------------------------
+TEST(BoardTest, Input5) {
+
+	// Construct and solve the board
+	Board board("test/input/input5.txt");
+	board.solve();
+
+}
+
 int main(int argc, char **argv) {
 	testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
